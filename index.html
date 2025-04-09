@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Professional Quiz App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f0f0f;
+      --card-bg: #1e1e1e;
+      --accent: #00bcd4;
+      --accent-hover: #0097a7;
+      --danger: #ff5252;
+      --text-light: #ffffff;
+      --input-bg: #2c2c2c;
+      --shadow: 0 4px 24px rgba(0, 188, 212, 0.15);
+      --danger-shadow: 0 4px 24px rgba(255, 82, 82, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      padding: 20px;
+    }
+
+    .card {
+      max-width: 600px;
+      margin: 60px auto;
+      padding: 40px 30px;
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    h2, h3 {
+      color: var(--accent);
+      font-size: 28px;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+      background-color: var(--input-bg);
+      color: white;
+    }
+
+    input[type="text"]::placeholder {
+      color: #aaa;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 14px 30px;
+      font-size: 16px;
+      background: var(--accent);
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-weight: 500;
+    }
+
+    button:hover {
+      background-color: var(--accent-hover);
+    }
+
+    #timer {
+      text-align: right;
+      color: var(--danger);
+      font-size: 18px;
+      margin-bottom: 15px;
+      font-weight: 500;
+    }
+
+    .question {
+      font-size: 22px;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .option {
+      background: var(--input-bg);
+      padding: 14px 16px;
+      margin: 10px 0;
+      border-radius: 8px;
+      transition: 0.2s ease;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .option:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    .option input[type="radio"] {
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+
+    #exit-message {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--card-bg);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: var(--danger-shadow);
+      z-index: 999;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    #exit-message h3 {
+      color: var(--danger);
+      margin-bottom: 20px;
+    }
+
+    #final-score {
+      font-size: 18px;
+      font-weight: 500;
+      color: #eee;
+      margin: 15px 0;
+    }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 998;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 25px 20px;
+      }
+
+      h2, h3 {
+        font-size: 24px;
+      }
+
+      .question {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Start Section -->
+  <div id="start-section" class="card">
+    <h2>Enter Your Details to Start Quiz</h2>
+    <input type="text" id="username" placeholder="Your Name" required />
+    <input type="text" id="Registration" placeholder="Registration Number" required />
+    <input type="text" id="Year" placeholder="Year" required />
+    <input type="text" id="Department" placeholder="Department" required />
+    <input type="text" id="Section" placeholder="Section" required />
+    <button onclick="startQuiz()">Start Quiz</button>
+  </div>
+
+  <!-- Quiz Container -->
+  <div id="quiz-container" class="card" style="display: none;">
+    <div id="timer"></div>
+    <div class="question" id="question"></div>
+    <div id="options"></div>
+    <button onclick="submitAnswer()" id="next-btn">Next</button>
+  </div>
+
+  <!-- Exit Message -->
+  <div id="overlay"></div>
+  <div id="exit-message">
+    <h3 id="exit-text">Quiz Submitted!</h3>
+    <p id="final-score"></p>
+    <button onclick="location.reload()">Restart</button>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    let questions = [];
+    let current = 0;
+    let score = 0;
+    let name = '', Reg = '', department = '', section = '', year = '';
+    let timerInterval;
+    let quizStarted = false;
+
+    async function startQuiz() {
+      name = document.getElementById('username').value.trim();
+      Reg = document.getElementById('Registration').value.trim();
+      year = document.getElementById('Year').value.trim();
+      department = document.getElementById('Department').value.trim();
+      section = document.getElementById('Section').value.trim();
+
+      if (!name || !Reg || !year || !department || !section) {
+        return alert("Please fill all fields.");
+      }
+
+      try {
+        const res = await fetch('/questions');
+        questions = await res.json();
+      } catch (e) {
+        return alert("Failed to load questions.");
+      }
+
+      if (questions.length === 0) return alert("No quiz questions available.");
+
+      document.getElementById('start-section').style.display = 'none';
+      document.getElementById('quiz-container').style.display = 'block';
+      quizStarted = true;
+
+      enterFullscreen();
+      startTimer(15);
+      loadQuestion();
+
+      document.addEventListener('fullscreenchange', checkFullscreenExit);
+    }
+
+    function enterFullscreen() {
+      const el = document.documentElement;
+      if (el.requestFullscreen) el.requestFullscreen();
+    }
+
+    function checkFullscreenExit() {
+      if (!document.fullscreenElement && quizStarted) {
+        showExitMessage(`${name}, you exited the quiz. Your previous answers were saved.`);
+        submitQuiz(true);
+      }
+    }
+
+    function startTimer(seconds) {
+      let remaining = seconds;
+      document.getElementById('timer').innerText = `Time left: ${remaining}s`;
+      timerInterval = setInterval(() => {
+        remaining--;
+        document.getElementById('timer').innerText = `Time left: ${remaining}s`;
+        if (remaining <= 0) {
+          submitAnswer();
+        }
+      }, 1000);
+    }
+
+    function loadQuestion() {
+      if (current >= questions.length) return submitQuiz();
+
+      clearInterval(timerInterval);
+      startTimer(15);
+
+      const q = questions[current];
+      document.getElementById('question').innerText = q.question;
+      const optionsHTML = q.options.map((opt, i) => `
+        <div class="option">
+          <input type="radio" name="option" value="${opt}" id="opt${i}">
+          <label for="opt${i}">${opt}</label>
+        </div>
+      `).join('');
+      document.getElementById('options').innerHTML = optionsHTML;
+
+      document.getElementById('next-btn').innerText = current === questions.length - 1 ? "Submit Quiz" : "Next";
+    }
+
+    function submitAnswer() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (selected && selected.value === questions[current].answer) {
+        score++;
+      }
+      current++;
+      if (current >= questions.length) {
+        submitQuiz();
+      } else {
+        loadQuestion();
+      }
+    }
+
+    function submitQuiz(isExit = false) {
+      clearInterval(timerInterval);
+      document.exitFullscreen?.();
+
+      fetch('/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          Reg,
+          department,
+          section,
+          year,
+          score,
+          exited: isExit
+        })
+      }).then(() => {
+        const message = isExit ? `${name}, you Submited the quiz.` : `${name}, quiz completed.`;
+        showExitMessage(message);
+      });
+    }
+
+    function showExitMessage(message) {
+      document.getElementById('quiz-container').style.display = 'none';
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('exit-message').style.display = 'block';
+      document.getElementById('exit-text').innerText = message;
+      document.getElementById('final-score').innerText = '';
+    }
+  </script>
+
+</body>
+</html>

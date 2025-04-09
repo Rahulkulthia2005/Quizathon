@@ -1,0 +1,79 @@
+[
+  {
+    "id": 1744014174544,
+    "question": "Which data structure uses FIFO (First-In-First-Out) principle?",
+    "options": [
+      "Stack",
+      "Queue",
+      "Tree",
+      "Array"
+    ],
+    "answer": "Queue"
+  },
+  {
+    "id": 1744018181720,
+    "question": "Which of the following is a linear data structure?",
+    "options": [
+      " Tree",
+      "Graph",
+      "Hash Table",
+      "Stack"
+    ],
+    "answer": "Stack"
+  },
+  {
+    "id": 1744019229465,
+    "question": "Which of the following is used for dynamic memory allocation in C++?",
+    "options": [
+      "alloc()",
+      "malloc()",
+      "calloc()",
+      "new"
+    ],
+    "answer": "new"
+  },
+  {
+    "id": 1744043096269,
+    "question": "What is a constructor in C++?",
+    "options": [
+      " A function used to destroy objects",
+      "A function used to construct loops",
+      "A special function called automatically when an object is created",
+      "None of the above"
+    ],
+    "answer": "A special function called automatically when an object is created"
+  },
+  {
+    "id": 1744136599874,
+    "question": "What is the correct way to create an object in C++?",
+    "options": [
+      "class MyClass obj();",
+      " object MyClass;",
+      "MyClass obj;",
+      "new class obj();"
+    ],
+    "answer": "MyClass obj;"
+  },
+  {
+    "id": 1744181217465,
+    "question": "What does the term “booting” refer to?",
+    "options": [
+      " Restarting the printer",
+      "Logging into an account",
+      "Loading the operating system",
+      "Installing a program"
+    ],
+    "answer": "Loading the operating system"
+  },
+  {
+    "id": 1744181278988,
+    "question": "Which of the following is NOT an operating system?",
+    "options": [
+      "Linux",
+      "Oracle",
+      "macOS",
+      " Windows"
+    ],
+    "answer": "Oracle"
+  }
+]

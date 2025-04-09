@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Tanishq Agarwal",
+    "score": 3,
+    "department": "Advance Computing",
+    "Reg": "PCE22CY057",
+    "section": "F",
+    "year": "3rd",
+    "exited": false,
+    "time": "2025-04-08T06:57:00.949Z"
+  },
+  {
+    "name": "Manmohan Gupta",
+    "score": 0,
+    "department": "Computer Science",
+    "Reg": "PCE22CR032",
+    "section": "R",
+    "year": "3rd",
+    "exited": false,
+    "time": "2025-04-08T17:49:11.964Z"
+  },
+  {
+    "name": "Sumit",
+    "score": 1,
+    "department": "Advance computing",
+    "Reg": "PCE22CY055",
+    "section": "F",
+    "year": "3rd",
+    "exited": false,
+    "time": "2025-04-08T18:05:14.028Z"
+  },
+  {
+    "name": "Harshit Sharma",
+    "score": 0,
+    "department": "Advance Computing",
+    "Reg": "PCE22CY022",
+    "section": "F",
+    "year": "3rd",
+    "exited": false,
+    "time": "2025-04-08T18:16:35.392Z"
+  },
+  {
+    "name": "Rahul Kulthia",
+    "score": 2,
+    "department": "Advance computing",
+    "Reg": "PCE22CY045",
+    "section": "F",
+    "year": "3rd",
+    "exited": true,
+    "time": "2025-04-08T18:34:26.021Z"
+  }
+]
